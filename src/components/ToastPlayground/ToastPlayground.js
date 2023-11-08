@@ -1,22 +1,34 @@
 import React from 'react';
 
 import Button from '../Button';
-import Toast from '../Toast';
+import ToastShelf from '../ToastShelf';
 
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
+const DEFAULT_MESSAGE = '';
+const DEFAULT_VARIANT = VARIANT_OPTIONS[0];
 
 function ToastPlayground() {
-  const [message, setMessage] = React.useState('');
-  const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [toastIsDisplayed, setToastIsDisplayed] =
-    React.useState(false);
+  const [message, setMessage] = React.useState(DEFAULT_MESSAGE);
+  const [variant, setVariant] = React.useState(DEFAULT_VARIANT);
+  const [toasts, setToasts] = React.useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    setToastIsDisplayed(true);
+    const nextToasts = [
+      ...toasts,
+      {
+        id: crypto.randomUUID(),
+        variant: variant,
+        message: message,
+      },
+    ];
+
+    setToasts(nextToasts);
+    setMessage(DEFAULT_MESSAGE);
+    setVariant(DEFAULT_VARIANT);
   }
 
   return (
@@ -26,13 +38,8 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {toastIsDisplayed && (
-        <Toast
-          variant={variant}
-          handleDismiss={() => setToastIsDisplayed(false)}
-        >
-          {message}
-        </Toast>
+      {toasts.length > 0 && (
+        <ToastShelf toasts={toasts} setToasts={setToasts} />
       )}
 
       <form
