@@ -6,12 +6,31 @@ import { ToastContext } from '../ToastProvider';
 import styles from './ToastShelf.module.css';
 
 function ToastShelf() {
-  const { toasts, removeToast } = React.useContext(ToastContext);
+  const { toasts, removeToast, removeAllToasts } =
+    React.useContext(ToastContext);
 
-  if (toasts.length <= 0) return;
+  React.useEffect(() => {
+    function handleKeyDown(e) {
+      console.log('test');
+      if (e.code !== 'Escape') return;
+
+      removeAllToasts();
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [removeAllToasts]);
 
   return (
-    <ol className={styles.wrapper}>
+    <ol
+      role="region"
+      aria-live="polite"
+      aria-label="Notification"
+      className={styles.wrapper}
+    >
       {toasts.map(({ id, variant, message }) => (
         <li key={id} className={styles.toastWrapper}>
           <Toast

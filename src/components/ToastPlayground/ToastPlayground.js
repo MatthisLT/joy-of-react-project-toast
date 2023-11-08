@@ -14,7 +14,7 @@ const DEFAULT_VARIANT = VARIANT_OPTIONS[0];
 function ToastPlayground() {
   const [message, setMessage] = React.useState(DEFAULT_MESSAGE);
   const [variant, setVariant] = React.useState(DEFAULT_VARIANT);
-  const { addToast } = React.useContext(ToastContext);
+  const { toasts, addToast } = React.useContext(ToastContext);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -35,7 +35,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf />
+      {toasts.length > 0 && <ToastShelf />}
 
       <form
         className={styles.controlsWrapper}

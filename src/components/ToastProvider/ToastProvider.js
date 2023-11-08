@@ -20,12 +20,17 @@ function ToastProvider({ children }) {
     setToasts(nextToasts);
   }
 
+  function removeAllToasts() {
+    setToasts([]);
+  }
+
   return (
     <ToastContext.Provider
       value={{
         toasts,
         addToast,
         removeToast,
+        removeAllToasts,
       }}
     >
       {children}
